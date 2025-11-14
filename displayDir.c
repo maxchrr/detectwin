@@ -28,13 +28,21 @@ int main(int argc, char * argv[]){
     }    	
     	
     struct dirent *dir;
-    
+    char ** result =(char **)malloc(sizeof(char *));
+    int nb = 0;
     DIR * d = myOpenDir(argv[1]);
     
-    while((dir = readdir(d)) != NULL)
-    	printf("%s\n", dir->d_name);
-    	
+    while((dir = readdir(d)) != NULL){
+    	result = realloc(result,sizeof(char*)* (nb +1));
+    	result[nb] = dir->d_name;
+    	nb ++;
+    }
+    
+    for (int i=0; i<nb;i++){
+    	printf("%s\n",result[i]);
+    }
     myCloseDir(d);
+    free(result);
     
     return EXIT_SUCCESS;
 }
