@@ -2,23 +2,31 @@
 #include <stdio.h>
 
 #include "displayDir.h"
-#include "compare_by_data.h"
-#include "compare_by_name.h"
+#include "compares.h"
 
-char ** fileInDir(char * file, char ** dir){
-
+char ** fileInDir(char * file, struct dirTab d){
+    char ** result = (char **)malloc(sizeof(char *));
+    struct dirTab tabRes = {result,0};
+    for(int i = 0; i < d.size; i++){
+    	if ((compare(file, d.dir[i])) || (cmpname(3, d.dir[i]))){
+    	    tabRes.result = realloc(tabRes.result,sizeof(char*)* (tabRes.size +1));
+    	    tabRes.result[tabRes.size] = d.dir[i];
+    	    tabRes.size++;  	    
+    	    }   
+    }
+    return result;
 }
 
 int main(int argc, char * argv[]){
     
-    if (argc != 2)
+    if (argc != 3)
     {
     	fprintf(stderr,"error : not enough/too many arguments\n");
     	return EXIT_FAILURE;
     }
 
-    char ** tabfiles = display(argv[1]);
-    int index = 0;
+    //char ** tabfiles = display(argv[1]);
+    //int index = 0;
     
     /*Notes :
     - pour chaque fichier ayant effectué une vérification sur tout les autres, le prendre en 		
@@ -29,12 +37,16 @@ int main(int argc, char * argv[]){
     - faire fonction vérifiant si un fichier est dans un dossier
     */
     
-    while (tabfiles != NULL)
+    /*while (tabfiles != NULL)
     {
     	if (isFile(tabfiles[index]))
     	    
-    }
-    
+    }*/
+    char ** result = (char **)malloc(sizeof(char *));
+    struct dirTab tab = {result,0};
+    tabFromDir(argv[2], &tab);
+    tab = fileInDir(argv[1], tab);
+    displayTab(tab);
 
     return EXIT_SUCCESS;
 }
