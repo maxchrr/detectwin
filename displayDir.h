@@ -6,7 +6,11 @@
 
 DIR * myOpenDir(char * nomDir);
 
+bool isDir(char * filename);
+
 void myCloseDir(DIR * d);
+
+void fileTab(int tabLength, char * tab[]);
 
 int display(int argc, char * argv[]);
 
