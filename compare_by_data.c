@@ -1,6 +1,7 @@
-#include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
+
+#include "compares.h"
 
 unsigned char checksum (const char * filename){
 

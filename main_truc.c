@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <stdbool.h>
 
-#include "compare_by_data.c"
+#include "compares.h"
 #include "delete_file.c"
 #include "move_file.c"
 
