@@ -4,17 +4,17 @@
 #include "displayDir.h"
 #include "compares.h"
 
-char ** fileInDir(char * file, struct dirTab d){
+struct dirTab fileInDir(char * file, struct dirTab d){
     char ** result = (char **)malloc(sizeof(char *));
     struct dirTab tabRes = {result,0};
     for(int i = 0; i < d.size; i++){
-    	if ((compare(file, d.dir[i])) || (cmpname(3, d.dir[i]))){
-    	    tabRes.result = realloc(tabRes.result,sizeof(char*)* (tabRes.size +1));
-    	    tabRes.result[tabRes.size] = d.dir[i];
+    	if ((compare(file, d.dir[i])) || (cmpname(file, d.dir[i]))){
+    	    tabRes.dir = realloc(tabRes.dir,sizeof(char*)* (tabRes.size +1));
+    	    tabRes.dir[tabRes.size] = d.dir[i];
     	    tabRes.size++;  	    
     	    }   
     }
-    return result;
+    return tabRes;
 }
 
 int main(int argc, char * argv[]){
