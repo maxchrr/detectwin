@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "displayDir.h"
 
@@ -33,42 +34,44 @@ void myCloseDir(DIR * d){
 }
 
 /* Fonction pour afficher un tableau de fichiers */
-void fileTab(int tabLength, char * tab[]){
-    for(int i = 0; i < tabLength; i++)
-    	printf("%s\n", tab[i]);
+void displayTab(struct dirTab d){
+    for(int i = 2; i < d.size; i++)
+    	printf("%s\n", d.dir[i]);
 }
 
+/* Foncton qui transforme un répertoire en tableau de chaines de caractères */
+void tabFromDir(char * namedir, struct dirTab *d){   	
+    	
+    struct dirent *dir;
+    
+    DIR * file = myOpenDir(namedir);
+    
+    while((dir = readdir(file)) != NULL){
+    	d->dir = realloc(d->dir,sizeof(char*)* (d->size +1));
+    	d->dir[d->size] = malloc(strlen(dir->d_name));
+    	strcpy(d->dir[d->size], dir->d_name);
+    	d->size++;
+    }
+	
+    myCloseDir(file); 
+}
 
-int display(int argc, char * argv[]){
+int main (int argc, char * argv[]){
 
     // Vérifie qu'il n'y ait qu'une chaine de caractère passée en paramètre
     if (argc != 2)
     {	
     	fprintf(stderr,"error : not enough/too many arguments\n");
-    	return EXIT_FAILURE;
-    }    	
-    	
-    struct dirent *dir;
-    char ** result =(char **)malloc(sizeof(char *));
-    int nb = 0;
-    DIR * d = myOpenDir(argv[1]);
-    
-    while((dir = readdir(d)) != NULL){
-    	result = realloc(result,sizeof(char*)* (nb +1));
-    	result[nb] = dir->d_name;
-    	nb ++;
-    }
-    
-    fileTab(nb,result);
+    } 
 
-    myCloseDir(d);
-    free(result);
+    char ** result =(char **)malloc(sizeof(char *));
+    struct dirTab d = {result,0}; 
+	
+    tabFromDir(argv[1],&d);
+    
+    displayTab(d);
+    free(d.dir);
     
     return EXIT_SUCCESS;
-}
-
-int main (int argc, char * argv[]){
-
-	display(argc,argv);
-	return EXIT_SUCCESS;
+    
 }
