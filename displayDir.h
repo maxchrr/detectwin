@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <dirent.h>
 
 struct dirTab{
     char ** dir;
