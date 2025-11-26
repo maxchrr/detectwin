@@ -2,10 +2,6 @@
 
 #include "compares.h"
 
-int cmpname(const char * file1, const char * file2){
-
-    if(strcmp(file1,file2)==0){
-        printf("true\n");
-    }
-    return 0;
+bool cmpname(const char * file1, const char * file2){
+	return (strcmp(file1,file2) == 0);
 }

@@ -35,7 +35,7 @@ void myCloseDir(DIR * d){
 
 /* Fonction pour afficher un tableau de fichiers */
 void displayTab(struct dirTab d){
-    for(int i = 2; i < d.size; i++)
+    for(int i = 0; i < d.size; i++)
     	printf("%s\n", d.dir[i]);
 }
 
@@ -49,6 +49,8 @@ void tabFromDir(char * namedir, struct dirTab *d){
     while((dir = readdir(file)) != NULL){
     	d->dir = realloc(d->dir,sizeof(char*)* (d->size +1));
     	d->dir[d->size] = malloc(strlen(dir->d_name));
+	if (strcmp(dir->d_name, ".") == 0) continue;
+	if (strcmp(dir->d_name, "..") == 0) continue;
     	strcpy(d->dir[d->size], dir->d_name);
     	d->size++;
     }
