@@ -55,23 +55,3 @@ void tabFromDir(char * namedir, struct dirTab *d){
 	
     myCloseDir(file); 
 }
-
-int main (int argc, char * argv[]){
-
-    // Vérifie qu'il n'y ait qu'une chaine de caractère passée en paramètre
-    if (argc != 2)
-    {	
-    	fprintf(stderr,"error : not enough/too many arguments\n");
-    } 
-
-    char ** result =(char **)malloc(sizeof(char *));
-    struct dirTab d = {result,0}; 
-	
-    tabFromDir(argv[1],&d);
-    
-    displayTab(d);
-    free(d.dir);
-    
-    return EXIT_SUCCESS;
-    
-}
