@@ -35,8 +35,12 @@ void ui_init(void)
 	init_pair(1, COLOR_CYAN, -1);   // directories
 	init_pair(2, COLOR_BLACK, -1);  // files (unused explicitly)
 	init_pair(3, COLOR_YELLOW, -1); // cursor
+<<<<<<< HEAD
 	init_pair(4, COLOR_GREEN, -1); // bar
 >>>>>>> 794891d (Merge branch)
+=======
+	init_pair(4, COLOR_GREEN, -1);	// bar
+>>>>>>> 2aec38a (Update)
 
 	getmaxyx(stdscr, screen_rows, screen_cols);
 }
@@ -89,7 +93,11 @@ void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
 	for (int i=ui_scroll; i<items.count && i<ui_scroll+visible; ++i)
 	{
 		Item *it = items.arr[i];
+<<<<<<< HEAD
 		int row = i - ui_scroll + HEADER_ROWS; /* first list row is HEADER_ROWS */
+=======
+		int row = i - ui_scroll + 2;
+>>>>>>> 2aec38a (Update)
 
 		char fullpath[PATH_MAX_LEN];
 		snprintf(fullpath, sizeof(fullpath), "%s/%s", cwd, it->name);
@@ -102,9 +110,12 @@ void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
 			attron(COLOR_PAIR(2));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 		int row = i-ui_scroll+2;
 >>>>>>> 794891d (Merge branch)
+=======
+>>>>>>> 2aec38a (Update)
 		mvprintw(row, 2, "[%c] %s%s", mark, it->name, it->is_dir ? "/" : "");
 
 		if (it->is_dir)
@@ -179,6 +190,10 @@ void show_popup(const char *msg)
 bool ui_handle_mouse(int *cursor, Items items, MEVENT *ev)
 {
 	if (!cursor) return false;
+<<<<<<< HEAD
+=======
+	int list_start = 1;
+>>>>>>> 2aec38a (Update)
 
 	int rows, cols;
 	getmaxyx(stdscr, rows, cols);

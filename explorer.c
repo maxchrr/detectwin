@@ -102,18 +102,12 @@ int main(int argc, char* argv[])
 =======
 			if (sel.count >= 2)
 			{
-				for (int i=0; i<sel.count; ++i)
-				{
-					for (int j=i+1; j<sel.count; ++j)
-					{
-						if (same_filename(sel.paths[i], sel.paths[j]))
-						{
-							status = true;
-							break;
-						}
-					}
-				}
+				if (sel_is_duplicated(&sel))
+					status = true;
+				else
+					status = false;
 			}
+			status = false;
 			break;
 >>>>>>> 794891d (Merge branch)
 

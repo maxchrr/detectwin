@@ -5,7 +5,10 @@
 
 #include <string.h>
 
+<<<<<<< HEAD
 #include "items.h"
+=======
+>>>>>>> 2aec38a (Update)
 #include "compares.h"
 #include "selection.h"
 
@@ -89,6 +92,7 @@ void sel_remove(Selection *s, const char *path)
 	}
 }
 
+<<<<<<< HEAD
 void sel_remove_dir(Selection *sel, const char *path)
 {
 	Items items = load_dir(path);
@@ -106,6 +110,8 @@ void sel_remove_dir(Selection *sel, const char *path)
 	free_dir(&items);
 }
 
+=======
+>>>>>>> 2aec38a (Update)
 bool sel_is_duplicated(Selection *s)
 {
 	if(!s || s->count < 2) return false;
@@ -116,8 +122,11 @@ bool sel_is_duplicated(Selection *s)
 		{
 			if (cmpname(s->paths[i], s->paths[j]))
 				return true;
+<<<<<<< HEAD
 			else if (cmpdata(s->paths[i], s->paths[j]))
 				return true;
+=======
+>>>>>>> 2aec38a (Update)
 		}
 	}
 	return false;
