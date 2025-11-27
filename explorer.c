@@ -31,7 +31,11 @@ int main(int argc, char* argv[])
 	 * else, fallback to current directory.
 	 */
 	if (argc == 2)
-		items = load_dir(argv[1]);
+	{
+		chdir(argv[1]);
+		getcwd(cwd,sizeof(cwd));
+		items = load_dir(cwd);
+	}
 	else
 	{
 		getcwd(cwd,sizeof(cwd));
@@ -64,6 +68,9 @@ int main(int argc, char* argv[])
 			free_dir(&items);
 			ui_end();
 			return 0;
+
+		case 'h':
+			
 
 		case KEY_UP:
 			if (items.count > 0)
