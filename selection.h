@@ -14,5 +14,6 @@ void sel_free(Selection *s);
 void sel_add(Selection *s, const char *path);
 void sel_remove(Selection *s, const char *path);
 bool sel_contains(Selection *s, const char *path);
+bool sel_is_duplicated(Selection *s);
 
 #endif

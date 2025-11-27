@@ -3,6 +3,7 @@
 
 #include <string.h>
 
+#include "compares.h"
 #include "selection.h"
 
 /* internal grow helper */
@@ -65,4 +66,19 @@ void sel_remove(Selection *s, const char *path)
 			return;
 		}
 	}
+}
+
+bool sel_is_duplicated(Selection *s)
+{
+	if(!s || s->count < 2) return false;
+
+	for (int i=0; i<s->count; ++i)
+	{
+		for (int j=i+1; j<s->count; ++j)
+		{
+			if (cmpname(s->paths[i], s->paths[j]))
+				return true;
+		}
+	}
+	return false;
 }

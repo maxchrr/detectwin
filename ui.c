@@ -25,7 +25,7 @@ void ui_init(void)
 	init_pair(1, COLOR_CYAN, -1);   // directories
 	init_pair(2, COLOR_BLACK, -1);  // files (unused explicitly)
 	init_pair(3, COLOR_YELLOW, -1); // cursor
-	init_pair(4, COLOR_GREEN, -1); // bar
+	init_pair(4, COLOR_GREEN, -1);	// bar
 
 	getmaxyx(stdscr, screen_rows, screen_cols);
 }
@@ -56,7 +56,7 @@ void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
 	for (int i=ui_scroll; i<items.count && i<ui_scroll+visible; ++i)
 	{
 		Item *it = items.arr[i];
-		int row = i - ui_scroll + 1;
+		int row = i - ui_scroll + 2;
 
 		char fullpath[PATH_MAX_LEN];
 		snprintf(fullpath, sizeof(fullpath), "%s/%s", cwd, it->name);
@@ -68,7 +68,6 @@ void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
 		if (it->is_dir)
 			attron(COLOR_PAIR(1));
 
-		int row = i-ui_scroll+2;
 		mvprintw(row, 2, "[%c] %s%s", mark, it->name, it->is_dir ? "/" : "");
 
 		if (it->is_dir)
@@ -96,8 +95,7 @@ void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
 bool ui_handle_mouse(int *cursor, Items items, MEVENT *ev)
 {
 	if (!cursor) return false;
-	int list_start = 2;
-	int list_end = list_start+items.count-1;
+	int list_start = 1;
 
 	int rows, cols;
 	getmaxyx(stdscr, rows, cols);
