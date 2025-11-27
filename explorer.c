@@ -51,10 +51,12 @@ int main(int argc, char* argv[])
 	ui_init();
 	MEVENT mev;
 
+	bool status = false;
+
 	int ch;
 	while (1)
 	{
-		draw(cursor, cwd, items, &sel);
+		draw(cursor, cwd, items, &sel, status);
 		Item *it = items.count > 0 ? items.arr[cursor] : NULL;
 		ch = getch();
 		switch (ch)
@@ -88,6 +90,7 @@ int main(int argc, char* argv[])
 			break;
 
 		case 'x':
+<<<<<<< HEAD
 		{
 			bool duplicated = sel_is_duplicated(&sel);
 			if (duplicated)
@@ -96,6 +99,23 @@ int main(int argc, char* argv[])
 				show_popup("No duplicated detected.");
 			break;
 		}
+=======
+			if (sel.count >= 2)
+			{
+				for (int i=0; i<sel.count; ++i)
+				{
+					for (int j=i+1; j<sel.count; ++j)
+					{
+						if (same_filename(sel.paths[i], sel.paths[j]))
+						{
+							status = true;
+							break;
+						}
+					}
+				}
+			}
+			break;
+>>>>>>> 794891d (Merge branch)
 
 		case ' ':  // Toggle selected mark
 			if (it)

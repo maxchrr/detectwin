@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 #include "config.h"
 
+=======
+>>>>>>> 794891d (Merge branch)
 #include <string.h>
 
 #include <ncurses.h>
@@ -22,11 +25,18 @@ void ui_init(void)
 	use_default_colors();
 
 	/* color pairs */
+<<<<<<< HEAD
 	init_pair(1, COLOR_RED, -1);	// title
 	init_pair(2, COLOR_CYAN, -1);   // directories
 	init_pair(3, COLOR_BLACK, -1);  // files (unused explicitly)
 	init_pair(4, COLOR_YELLOW, -1); // cursor
 	init_pair(5, COLOR_GREEN, -1);	// bar
+=======
+	init_pair(1, COLOR_CYAN, -1);   // directories
+	init_pair(2, COLOR_BLACK, -1);  // files (unused explicitly)
+	init_pair(3, COLOR_YELLOW, -1); // cursor
+	init_pair(4, COLOR_GREEN, -1); // bar
+>>>>>>> 794891d (Merge branch)
 
 	getmaxyx(stdscr, screen_rows, screen_cols);
 }
@@ -36,7 +46,7 @@ void ui_end(void)
     endwin();
 }
 
-void draw(int cursor, char *cwd, Items items, Selection *sel)
+void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
 {
 	clear();
 	getmaxyx(stdscr, screen_rows, screen_cols);
@@ -91,6 +101,10 @@ void draw(int cursor, char *cwd, Items items, Selection *sel)
 		if (it->is_dir)
 			attron(COLOR_PAIR(2));
 
+<<<<<<< HEAD
+=======
+		int row = i-ui_scroll+2;
+>>>>>>> 794891d (Merge branch)
 		mvprintw(row, 2, "[%c] %s%s", mark, it->name, it->is_dir ? "/" : "");
 
 		if (it->is_dir)
@@ -100,6 +114,7 @@ void draw(int cursor, char *cwd, Items items, Selection *sel)
 			attroff(COLOR_PAIR(4) | A_BOLD | A_REVERSE);
 	}
 
+<<<<<<< HEAD
 	/* Explicitly clear the gap row so it's visually empty */
 	int gap_row = HEADER_ROWS + visible;
 	if (gap_row >= 0 && gap_row < screen_rows - FOOTER_ROWS)
@@ -144,6 +159,20 @@ void show_popup(const char *msg)
 
 	delwin(popup);
 	touchwin(stdscr);
+=======
+	if (status)
+		mvprintw(screen_rows - 2, 0, "found");
+	else
+		mvprintw(screen_rows - 2, 0, "not found");
+	int offset = 0;
+	for (int i=0; i<sel->count; ++i)
+	{ 
+		char* name = strrchr(sel->paths[i], '/');
+		mvprintw(screen_rows - 1, i+offset, "%s", name+1);
+		offset += strlen(name+1);
+	}
+
+>>>>>>> 794891d (Merge branch)
 	refresh();
 }
 

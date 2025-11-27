@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 #include "config.h"
 
 #include <stdio.h>
 #include <stdbool.h>
+=======
+#include <assert.h>
+#include <stdbool.h>
+
+#include <stdio.h>
+>>>>>>> 794891d (Merge branch)
 
 #include <string.h>
 
