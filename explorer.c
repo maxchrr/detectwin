@@ -86,20 +86,7 @@ int main(int argc, char* argv[])
 			break;
 
 		case 'x':
-			if (sel.count >= 2)
-			{
-				for (int i=0; i<sel.count; ++i)
-				{
-					for (int j=i+1; j<sel.count; ++j)
-					{
-						if (cmpname(sel.paths[i], sel.paths[j]))
-						{
-							status = true;
-							break;
-						}
-					}
-				}
-			}
+			status = sel_is_duplicated(&sel);
 			break;
 
 		case ' ':  // Toggle selected mark
