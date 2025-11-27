@@ -22,8 +22,7 @@ struct dirTab fileInDir(char * file, struct dirTab d){
 
 int main(int argc, char* argv[])
 {
-    	if (argc != 3) return EXIT_FAILURE;
-
+    	if (argc != 2) return EXIT_FAILURE;
 
     char ** result = (char **)malloc(sizeof(char *));
     struct dirTab tab = {result,0};
