@@ -1,7 +1,7 @@
 CC = cc
 CFLAGS = -Wall -Wextra -pedantic -std=c99 -I.
 
-SRC = explorer.c items.c selection.c ui.c
+SRC = explorer.c compares.c items.c selection.c ui.c
 OBJ = $(SRC:.c=.so)
 EXEC = detectwin
 

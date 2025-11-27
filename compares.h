@@ -1,13 +1,9 @@
-#ifndef COMPARES
-#define COMPARES
+#ifndef COMPARES_H
+#define COMPARES_H
 
-#include <stdio.h>
 #include <stdbool.h>
 
-unsigned char checksum (const char * filename);
-
-bool compare(const char * file1, const char * file2);
-
-bool cmpname(const char * file1, const char * file2);
+bool cmpdata(const char *path1, const char *path2);
+bool cmpname(const char *path1, const char *path2);
 
 #endif

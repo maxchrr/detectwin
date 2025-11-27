@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include <ncurses.h>
 
 #include "ui.h"
@@ -23,6 +25,7 @@ void ui_init(void)
 	init_pair(1, COLOR_CYAN, -1);   // directories
 	init_pair(2, COLOR_BLACK, -1);  // files (unused explicitly)
 	init_pair(3, COLOR_YELLOW, -1); // cursor
+	init_pair(4, COLOR_GREEN, -1); // bar
 
 	getmaxyx(stdscr, screen_rows, screen_cols);
 }
@@ -32,7 +35,7 @@ void ui_end(void)
     endwin();
 }
 
-void draw(int cursor, char *cwd, Items items, Selection *sel)
+void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
 {
 	clear();
 
@@ -65,13 +68,26 @@ void draw(int cursor, char *cwd, Items items, Selection *sel)
 		if (it->is_dir)
 			attron(COLOR_PAIR(1));
 
-		mvprintw(i + 2, 2, "[%c] %s%s", mark, it->name, it->is_dir ? "/" : "");
+		int row = i-ui_scroll+2;
+		mvprintw(row, 2, "[%c] %s%s", mark, it->name, it->is_dir ? "/" : "");
 
 		if (it->is_dir)
 			attroff(COLOR_PAIR(1));
 
 		if (i == cursor)
 			attroff(COLOR_PAIR(3) | A_BOLD | A_REVERSE);
+	}
+
+	if (status)
+		mvprintw(screen_rows - 2, 0, "found");
+	else
+		mvprintw(screen_rows - 2, 0, "not found");
+	int offset = 0;
+	for (int i=0; i<sel->count; ++i)
+	{ 
+		char* name = strrchr(sel->paths[i], '/');
+		mvprintw(screen_rows - 1, i+offset, "%s", name+1);
+		offset += strlen(name+1);
 	}
 
 	refresh();
