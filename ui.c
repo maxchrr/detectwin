@@ -35,7 +35,7 @@ void ui_end(void)
     endwin();
 }
 
-void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
+void draw(int cursor, char *cwd, Items items, Selection *sel)
 {
 	clear();
 
@@ -77,18 +77,30 @@ void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
 			attroff(COLOR_PAIR(3) | A_BOLD | A_REVERSE);
 	}
 
-	if (status)
-		mvprintw(screen_rows - 2, 0, "found");
-	else
-		mvprintw(screen_rows - 2, 0, "not found");
-	int offset = 0;
-	for (int i=0; i<sel->count; ++i)
-	{ 
-		char* name = strrchr(sel->paths[i], '/');
-		mvprintw(screen_rows - 1, i+offset, "%s", name+1);
-		offset += strlen(name+1);
-	}
+	refresh();
+}
 
+void show_popup(const char *msg)
+{
+	int rows, cols;
+	getmaxyx(stdscr, rows, cols);
+
+	int ph = 5;                     // hauteur popup
+	int pw = strlen(msg) + 6;  // largeur popup
+
+	int y = (rows - ph) / 2;
+	int x = (cols - pw) / 2;
+
+	WINDOW *popup = newwin(ph, pw, y, x);
+	box(popup, 0, 0);
+
+	mvwprintw(popup, 2, 3, "%s", msg);
+	wrefresh(popup);
+
+	wgetch(popup); // attendre une touche
+
+	delwin(popup);
+	touchwin(stdscr);
 	refresh();
 }
 
