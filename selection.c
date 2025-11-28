@@ -78,6 +78,8 @@ bool sel_is_duplicated(Selection *s)
 		{
 			if (cmpname(s->paths[i], s->paths[j]))
 				return true;
+			else if (cmpdata(s->paths[i], s->paths[j]))
+				return true;
 		}
 	}
 	return false;

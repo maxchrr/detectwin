@@ -85,8 +85,8 @@ void show_popup(const char *msg)
 	int rows, cols;
 	getmaxyx(stdscr, rows, cols);
 
-	int ph = 5;                     // hauteur popup
-	int pw = strlen(msg) + 6;  // largeur popup
+	int ph = 5;			// hauteur popup
+	int pw = strlen(msg) + 6;	// largeur popup
 
 	int y = (rows - ph) / 2;
 	int x = (cols - pw) / 2;
