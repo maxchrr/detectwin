@@ -1,10 +1,10 @@
+#include "config.h"
+
 #include <string.h>
 
 #include <ncurses.h>
 
 #include "ui.h"
-
-#define PATH_MAX_LEN 1024
 
 int ui_scroll = 0;
 static int screen_rows = 24, screen_cols = 80;
@@ -128,8 +128,8 @@ void show_popup(const char *msg)
 	int rows, cols;
 	getmaxyx(stdscr, rows, cols);
 
-	int ph = 5;			// hauteur popup
-	int pw = strlen(msg) + 6;	// largeur popup
+	int ph = 5;			// popup height
+	int pw = strlen(msg) + 6;	// popup width
 
 	int y = (rows - ph) / 2;
 	int x = (cols - pw) / 2;

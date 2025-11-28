@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,8 +8,6 @@
 #include "items.h"
 #include "compares.h"
 #include "selection.h"
-
-#define PATH_MAX_LEN 1024
 
 /* internal grow helper */
 static void sel_grow(Selection *s)

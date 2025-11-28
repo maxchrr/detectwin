@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,8 +15,6 @@
 #include "selection.h"
 
 #include "ui.h"
-
-#define PATH_MAX_LEN 1024
 
 static void usage(const char *exe)
 {
