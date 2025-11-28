@@ -117,7 +117,7 @@ void draw(int cursor, char *cwd, Items items, Selection *sel)
 	/* Bottom bar (footer) */
 	attron(COLOR_PAIR(5));
 	int footer_row = screen_rows - 1;
-	mvprintw(footer_row, 0, "Please select all files to be parsed. Actually %d files are selected.", sel->count);
+	mvprintw(footer_row, 0, "Please select all files to be parsed. Currently %d files are selected.", sel->count);
 	attroff(COLOR_PAIR(5));
 
 	refresh();
