@@ -1,8 +1,21 @@
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <string.h>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+#include "items.h"
+=======
+>>>>>>> 2aec38a (Update)
+#include "compares.h"
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 #include "selection.h"
 
 /* internal grow helper */
@@ -52,6 +65,27 @@ void sel_add(Selection *s, const char *path)
 	s->paths[s->count++] = strdup(path);
 }
 
+<<<<<<< HEAD
+=======
+void sel_add_dir(Selection *sel, const char *path)
+{
+	Items items = load_dir(path); // your existing function to list directory
+	for (int i = 0; i < items.count; i++)
+	{
+		Item *it = items.arr[i];
+		char fullpath[PATH_MAX_LEN];
+		snprintf(fullpath, sizeof(fullpath), "%s/%s", path, it->name);
+
+		sel_add(sel, fullpath);
+
+		// If it is a directory, recurse
+		if (it->is_dir)
+			sel_add_dir(sel, fullpath);
+	}
+	free_dir(&items); // free the Items array
+}
+
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 void sel_remove(Selection *s, const char *path)
 {
 	if (!s || !path) return;
@@ -66,3 +100,46 @@ void sel_remove(Selection *s, const char *path)
 		}
 	}
 }
+<<<<<<< HEAD
+=======
+
+<<<<<<< HEAD
+void sel_remove_dir(Selection *sel, const char *path)
+{
+	Items items = load_dir(path);
+	for (int i = 0; i < items.count; i++)
+	{
+		Item *it = items.arr[i];
+		char fullpath[PATH_MAX_LEN];
+		snprintf(fullpath, sizeof(fullpath), "%s/%s", path, it->name);
+
+		sel_remove(sel, fullpath);
+
+		if (it->is_dir)
+		sel_remove_dir(sel, fullpath);
+	}
+	free_dir(&items);
+}
+
+=======
+>>>>>>> 2aec38a (Update)
+bool sel_is_duplicated(Selection *s)
+{
+	if(!s || s->count < 2) return false;
+
+	for (int i=0; i<s->count; ++i)
+	{
+		for (int j=i+1; j<s->count; ++j)
+		{
+			if (cmpname(s->paths[i], s->paths[j]))
+				return true;
+<<<<<<< HEAD
+			else if (cmpdata(s->paths[i], s->paths[j]))
+				return true;
+=======
+>>>>>>> 2aec38a (Update)
+		}
+	}
+	return false;
+}
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315

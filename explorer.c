@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,13 +13,20 @@
 
 #include <assert.h>
 
+<<<<<<< HEAD
+=======
+#include "compares.h"
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 #include "items.h"
 #include "selection.h"
 
 #include "ui.h"
 
+<<<<<<< HEAD
 #define PATH_MAX_LEN 1024
 
+=======
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 static void usage(const char *exe)
 {
 	fprintf(stderr, "Usage : %s [directory]\n", exe);
@@ -50,17 +62,35 @@ int main(int argc, char* argv[])
 	ui_init();
 	MEVENT mev;
 
+<<<<<<< HEAD
 	int ch;
 	while (1)
 	{
 		draw(cursor, cwd, items, &sel);
+=======
+	bool status = false;
+
+	int ch;
+	while (1)
+	{
+		draw(cursor, cwd, items, &sel, status);
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 		Item *it = items.count > 0 ? items.arr[cursor] : NULL;
 		ch = getch();
 		switch (ch)
 		{
 		case KEY_MOUSE:
+<<<<<<< HEAD
 			if (getmouse(&mev) == OK && mev.bstate & BUTTON1_CLICKED)
 				ui_handle_mouse(&cursor, items, &mev);
+=======
+			if (getmouse(&mev) == OK)
+			{
+				/* Click selection */
+				if (mev.bstate & BUTTON1_CLICKED)
+					ui_handle_mouse(&cursor, items, &mev);
+			}
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 			break;
 
 		case 'q':  // Quit
@@ -82,6 +112,31 @@ int main(int argc, char* argv[])
 				cursor = (cursor + 1) % items.count;
 			break;
 
+<<<<<<< HEAD
+=======
+		case 'x':
+<<<<<<< HEAD
+		{
+			bool duplicated = sel_is_duplicated(&sel);
+			if (duplicated)
+				show_popup("Duplicate files !");
+			else
+				show_popup("No duplicated detected.");
+			break;
+		}
+=======
+			if (sel.count >= 2)
+			{
+				if (sel_is_duplicated(&sel))
+					status = true;
+				else
+					status = false;
+			}
+			status = false;
+			break;
+>>>>>>> 794891d (Merge branch)
+
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 		case ' ':  // Toggle selected mark
 			if (it)
 			{
@@ -89,9 +144,25 @@ int main(int argc, char* argv[])
 				snprintf(fullpath, sizeof(fullpath), "%s/%s", cwd, it->name);
 				
 				if (sel_contains(&sel, fullpath))
+<<<<<<< HEAD
 					sel_remove(&sel, fullpath);
 				else
 					sel_add(&sel, fullpath);
+=======
+				{
+					sel_remove(&sel, fullpath);
+
+					if (it->is_dir)
+						sel_remove_dir(&sel, fullpath);
+				}
+				else
+				{
+					sel_add(&sel, fullpath);
+
+					if (it->is_dir)
+						sel_add_dir(&sel, fullpath);
+				}
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 			}
 			break;
 

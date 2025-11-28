@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+#include "config.h"
+
+>>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 #include <stdio.h>
 #include <stdlib.h>
 
