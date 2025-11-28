@@ -1,22 +1,11 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 #include "config.h"
 
-=======
->>>>>>> 794891d (Merge branch)
 #include <string.h>
 
->>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 #include <ncurses.h>
 
 #include "ui.h"
 
-<<<<<<< HEAD
-#define PATH_MAX_LEN 1024
-
-=======
->>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 int ui_scroll = 0;
 static int screen_rows = 24, screen_cols = 80;
 
@@ -33,28 +22,11 @@ void ui_init(void)
 	use_default_colors();
 
 	/* color pairs */
-<<<<<<< HEAD
-	init_pair(1, COLOR_CYAN, -1);   // directories
-	init_pair(2, COLOR_BLACK, -1);  // files (unused explicitly)
-	init_pair(3, COLOR_YELLOW, -1); // cursor
-=======
-<<<<<<< HEAD
 	init_pair(1, COLOR_RED, -1);	// title
 	init_pair(2, COLOR_CYAN, -1);   // directories
 	init_pair(3, COLOR_BLACK, -1);  // files (unused explicitly)
 	init_pair(4, COLOR_YELLOW, -1); // cursor
 	init_pair(5, COLOR_GREEN, -1);	// bar
-=======
-	init_pair(1, COLOR_CYAN, -1);   // directories
-	init_pair(2, COLOR_BLACK, -1);  // files (unused explicitly)
-	init_pair(3, COLOR_YELLOW, -1); // cursor
-<<<<<<< HEAD
-	init_pair(4, COLOR_GREEN, -1); // bar
->>>>>>> 794891d (Merge branch)
-=======
-	init_pair(4, COLOR_GREEN, -1);	// bar
->>>>>>> 2aec38a (Update)
->>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 
 	getmaxyx(stdscr, screen_rows, screen_cols);
 }
@@ -64,33 +36,10 @@ void ui_end(void)
     endwin();
 }
 
-<<<<<<< HEAD
 void draw(int cursor, char *cwd, Items items, Selection *sel)
 {
 	clear();
 
-	getmaxyx(stdscr, screen_rows, screen_cols);
-
-	// Header
-	attron(A_BOLD);
-	mvprintw(0, 0, "Directory: %s", cwd);
-	attroff(A_BOLD);
-
-	int visible = screen_rows;
-	if (visible < 1) visible = 1;
-
-	if (cursor < ui_scroll) ui_scroll = cursor;
-	if (cursor >= ui_scroll + visible) ui_scroll = cursor - visible + 1;
-
-	// List
-	for (int i=ui_scroll; i<items.count && i<ui_scroll+visible; ++i)
-	{
-		Item *it = items.arr[i];
-		int row = i - ui_scroll + 1;
-=======
-void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
-{
-	clear();
 	getmaxyx(stdscr, screen_rows, screen_cols);
 
 	/* Layout constants */
@@ -131,46 +80,18 @@ void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
 	for (int i=ui_scroll; i<items.count && i<ui_scroll+visible; ++i)
 	{
 		Item *it = items.arr[i];
-<<<<<<< HEAD
 		int row = i - ui_scroll + HEADER_ROWS; /* first list row is HEADER_ROWS */
-=======
-		int row = i - ui_scroll + 2;
->>>>>>> 2aec38a (Update)
->>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 
 		char fullpath[PATH_MAX_LEN];
 		snprintf(fullpath, sizeof(fullpath), "%s/%s", cwd, it->name);
 		char mark = sel_contains(sel, fullpath) ? '*' : ' ';
 
 		if (i == cursor)
-<<<<<<< HEAD
-			attron(COLOR_PAIR(3) | A_BOLD | A_REVERSE);
-
-		if (it->is_dir)
-			attron(COLOR_PAIR(1));
-
-		mvprintw(i + 2, 2, "[%c] %s%s", mark, it->name, it->is_dir ? "/" : "");
-
-		if (it->is_dir)
-			attroff(COLOR_PAIR(1));
-
-		if (i == cursor)
-			attroff(COLOR_PAIR(3) | A_BOLD | A_REVERSE);
-	}
-
-=======
 			attron(COLOR_PAIR(4) | A_BOLD | A_REVERSE);
 
 		if (it->is_dir)
 			attron(COLOR_PAIR(2));
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-		int row = i-ui_scroll+2;
->>>>>>> 794891d (Merge branch)
-=======
->>>>>>> 2aec38a (Update)
 		mvprintw(row, 2, "[%c] %s%s", mark, it->name, it->is_dir ? "/" : "");
 
 		if (it->is_dir)
@@ -180,7 +101,6 @@ void draw(int cursor, char *cwd, Items items, Selection *sel, bool status)
 			attroff(COLOR_PAIR(4) | A_BOLD | A_REVERSE);
 	}
 
-<<<<<<< HEAD
 	/* Explicitly clear the gap row so it's visually empty */
 	int gap_row = HEADER_ROWS + visible;
 	if (gap_row >= 0 && gap_row < screen_rows - FOOTER_ROWS)
@@ -225,48 +145,17 @@ void show_popup(const char *msg)
 
 	delwin(popup);
 	touchwin(stdscr);
-=======
-	if (status)
-		mvprintw(screen_rows - 2, 0, "found");
-	else
-		mvprintw(screen_rows - 2, 0, "not found");
-	int offset = 0;
-	for (int i=0; i<sel->count; ++i)
-	{ 
-		char* name = strrchr(sel->paths[i], '/');
-		mvprintw(screen_rows - 1, i+offset, "%s", name+1);
-		offset += strlen(name+1);
-	}
 
->>>>>>> 794891d (Merge branch)
->>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 	refresh();
 }
 
 bool ui_handle_mouse(int *cursor, Items items, MEVENT *ev)
 {
 	if (!cursor) return false;
-<<<<<<< HEAD
-	int list_start = 2;
-	int list_end = list_start+items.count-1;
-=======
-<<<<<<< HEAD
-=======
-	int list_start = 1;
->>>>>>> 2aec38a (Update)
->>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 
 	int rows, cols;
 	getmaxyx(stdscr, rows, cols);
 
-<<<<<<< HEAD
-	int visible = rows-3;
-	if (visible<1) visible = 1;
-
-	if (ev->y >= list_start && ev->y < list_start+visible)
-	{
-		int idx = ui_scroll+(ev->y-list_start);
-=======
 	const int HEADER_ROWS = 4;   // must match draw()
 	const int GAP_ROWS    = 1;   // must match draw()
 	const int FOOTER_ROWS = 1;
@@ -278,13 +167,12 @@ bool ui_handle_mouse(int *cursor, Items items, MEVENT *ev)
 	if (ev->y >= list_start && ev->y < list_start+visible)
 	{
 		int idx = ui_scroll + (ev->y - list_start);
->>>>>>> 5a3730fd3636811137e6c01d773d1d320d7c9315
 		if (idx >= 0 && idx < items.count)
 		{
 			*cursor = idx;
 			return true; // cursor updated
 		}
 	}
-	
+
 	return false;
 }
