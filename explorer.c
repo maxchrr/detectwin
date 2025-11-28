@@ -60,8 +60,12 @@ int main(int argc, char* argv[])
 		switch (ch)
 		{
 		case KEY_MOUSE:
-			if (getmouse(&mev) == OK && mev.bstate & BUTTON1_CLICKED)
-				ui_handle_mouse(&cursor, items, &mev);
+			if (getmouse(&mev) == OK)
+			{
+				/* Click selection */
+				if (mev.bstate & BUTTON1_CLICKED)
+					ui_handle_mouse(&cursor, items, &mev);
+			}
 			break;
 
 		case 'q':  // Quit
