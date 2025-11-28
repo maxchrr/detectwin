@@ -104,9 +104,19 @@ int main(int argc, char* argv[])
 				snprintf(fullpath, sizeof(fullpath), "%s/%s", cwd, it->name);
 				
 				if (sel_contains(&sel, fullpath))
+				{
 					sel_remove(&sel, fullpath);
+
+					if (it->is_dir)
+						sel_remove_dir(&sel, fullpath);
+				}
 				else
+				{
 					sel_add(&sel, fullpath);
+
+					if (it->is_dir)
+						sel_add_dir(&sel, fullpath);
+				}
 			}
 			break;
 

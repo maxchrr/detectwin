@@ -3,8 +3,11 @@
 
 #include <string.h>
 
+#include "items.h"
 #include "compares.h"
 #include "selection.h"
+
+#define PATH_MAX_LEN 1024
 
 /* internal grow helper */
 static void sel_grow(Selection *s)
@@ -53,6 +56,24 @@ void sel_add(Selection *s, const char *path)
 	s->paths[s->count++] = strdup(path);
 }
 
+void sel_add_dir(Selection *sel, const char *path)
+{
+	Items items = load_dir(path); // your existing function to list directory
+	for (int i = 0; i < items.count; i++)
+	{
+		Item *it = items.arr[i];
+		char fullpath[PATH_MAX_LEN];
+		snprintf(fullpath, sizeof(fullpath), "%s/%s", path, it->name);
+
+		sel_add(sel, fullpath);
+
+		// If it is a directory, recurse
+		if (it->is_dir)
+			sel_add_dir(sel, fullpath);
+	}
+	free_dir(&items); // free the Items array
+}
+
 void sel_remove(Selection *s, const char *path)
 {
 	if (!s || !path) return;
@@ -66,6 +87,23 @@ void sel_remove(Selection *s, const char *path)
 			return;
 		}
 	}
+}
+
+void sel_remove_dir(Selection *sel, const char *path)
+{
+	Items items = load_dir(path);
+	for (int i = 0; i < items.count; i++)
+	{
+		Item *it = items.arr[i];
+		char fullpath[PATH_MAX_LEN];
+		snprintf(fullpath, sizeof(fullpath), "%s/%s", path, it->name);
+
+		sel_remove(sel, fullpath);
+
+		if (it->is_dir)
+		sel_remove_dir(sel, fullpath);
+	}
+	free_dir(&items);
 }
 
 bool sel_is_duplicated(Selection *s)
