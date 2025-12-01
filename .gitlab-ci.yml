@@ -1,0 +1,18 @@
+image: alpine:latest
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - apk add build-base
+    - apk add cmake
+    - mkdir build
+    - cd build
+    - cmake ..
+    - cmake --build .
+  artifacts:
+    paths:
+      - explorer
+    expire_in: 1 week
