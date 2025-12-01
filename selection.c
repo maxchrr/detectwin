@@ -56,23 +56,48 @@ void sel_add(Selection *s, const char *path)
 	s->paths[s->count++] = strdup(path);
 }
 
-void sel_add_dir(Selection *sel, const char *path)
+void sel_add_dir(Selection *s, const char *path)
 {
 	Items items = load_dir(path); // your existing function to list directory
-	for (int i = 0; i < items.count; i++)
-	{
-		Item *it = items.arr[i];
-		char fullpath[PATH_MAX_LEN];
-		snprintf(fullpath, sizeof(fullpath), "%s/%s", path, it->name);
+	if (items.count == 0 || items.arr == NULL) return;
 
-		sel_add(sel, fullpath);
+	for (int i=0; i<items.count; i++)
+	{
+		Item *cur = items.arr[i];
+		if (!cur || !cur->name) continue;
+
+		char fullpath[PATH_MAX_LEN];
+		snprintf(fullpath, sizeof(fullpath), "%s/%s", path, cur->name);
+
+		sel_add(s, fullpath);
 
 		// If it is a directory, recurse
-		if (it->is_dir)
-			sel_add_dir(sel, fullpath);
+		if (cur->is_dir)
+			sel_add_dir(s, fullpath);
 	}
 	free_dir(&items); // free the Items array
 }
+
+void sel_add_all(Selection *s, const Items items, const char *path)
+{
+	if (items.count == 0 || items.arr == NULL) return;
+
+	for (int i=0; i<items.count; ++i)
+	{
+		Item *cur = items.arr[i];
+		if (!cur || !cur->name) continue;
+
+		char fullpath[PATH_MAX_LEN];
+		snprintf(fullpath, sizeof(fullpath), "%s/%s", path, cur->name);
+
+		if (!sel_contains(s, fullpath))
+			sel_add(s, fullpath);
+
+		if (cur->is_dir)
+			sel_add_dir(s, fullpath);
+    	}
+}
+
 
 void sel_remove(Selection *s, const char *path)
 {
@@ -89,21 +114,36 @@ void sel_remove(Selection *s, const char *path)
 	}
 }
 
-void sel_remove_dir(Selection *sel, const char *path)
+void sel_remove_dir(Selection *s, const char *path)
 {
 	Items items = load_dir(path);
+	if (items.count == 0 || items.arr == NULL) return;
+
 	for (int i = 0; i < items.count; i++)
 	{
-		Item *it = items.arr[i];
+		Item *cur = items.arr[i];
+		if (!cur || !cur->name) continue;
+
 		char fullpath[PATH_MAX_LEN];
-		snprintf(fullpath, sizeof(fullpath), "%s/%s", path, it->name);
+		snprintf(fullpath, sizeof(fullpath), "%s/%s", path, cur->name);
 
-		sel_remove(sel, fullpath);
+		sel_remove(s, fullpath);
 
-		if (it->is_dir)
-		sel_remove_dir(sel, fullpath);
+		if (cur->is_dir)
+		sel_remove_dir(s, fullpath);
 	}
+
 	free_dir(&items);
+}
+
+void sel_remove_all(Selection *s, const char *path)
+{
+	if (!s || s->count == 0) return;
+
+	for (int i=0; i<s->count; ++i)
+		free(s->paths[i]);
+
+	s->count = 0;
 }
 
 bool sel_is_duplicated(Selection *s)

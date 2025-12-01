@@ -98,7 +98,21 @@ int main(int argc, char* argv[])
 		/* Show help */
 		case 'h':
 			display_help();
-			break;
+		break;
+
+		case 'a':
+			sel_add_all(&sel, items, cwd);
+			draw(cursor, cwd, items, &sel);  // <--- force immediate redraw
+    			refresh(); 
+			show_popup("All items selected.");
+		break;
+
+		case 'A':   // Remove all selections
+			sel_remove_all(&sel, cwd);
+			draw(cursor, cwd, items, &sel);  // <--- force immediate redraw
+    			refresh(); 
+			show_popup("Selection cleared.");
+		break;
 
 		/* Toggle selected mark */
 		case ' ':
