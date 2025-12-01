@@ -8,6 +8,7 @@ build:
   script:
     - apk add build-base
     - apk add cmake
+    - apk add ncurses
     - mkdir build
     - cd build
     - cmake ..
