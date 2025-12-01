@@ -57,6 +57,7 @@ int main(int argc, char* argv[])
 		ch = getch();
 		switch (ch)
 		{
+		/* Handle mouse */
 		case KEY_MOUSE:
 			if (getmouse(&mev) == OK)
 			{
@@ -66,25 +67,24 @@ int main(int argc, char* argv[])
 			}
 			break;
 
-		case 'q':  // Quit
+		/* Exit program */
+		case 'q':
 			sel_free(&sel);
 			free_dir(&items);
 			ui_end();
 			return 0;
 
-		case 'h':
-			
-
+		/* Handle arrow keys */
 		case KEY_UP:
 			if (items.count > 0)
 				cursor = (cursor - 1 + items.count) % items.count;
 			break;
-
 		case KEY_DOWN:
 			if (items.count > 0)
 				cursor = (cursor + 1) % items.count;
 			break;
 
+		/* Start detection */
 		case 'x':
 		{
 			bool duplicated = sel_is_duplicated(&sel);
@@ -95,7 +95,13 @@ int main(int argc, char* argv[])
 			break;
 		}
 
-		case ' ':  // Toggle selected mark
+		/* Show help */
+		case 'h':
+			display_help();
+			break;
+
+		/* Toggle selected mark */
+		case ' ':
 			if (it)
 			{
 				char fullpath[PATH_MAX_LEN];
@@ -118,7 +124,8 @@ int main(int argc, char* argv[])
 			}
 			break;
 
-		case '\n':  // Enter directory
+		/* Enter selected directory */
+		case '\n':
 			if (it && it->is_dir)
 			{
 				char next[PATH_MAX_LEN];
@@ -135,8 +142,9 @@ int main(int argc, char* argv[])
 			}
 			break;
 
+		/* Go up current directory */
 		case KEY_BACKSPACE:
-		case 127:  // Go up directory
+		case 127:
 			if (chdir("..") == 0)
 			{
 				if (!getcwd(cwd, sizeof(cwd)))

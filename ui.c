@@ -149,6 +149,29 @@ void show_popup(const char *msg)
 	refresh();
 }
 
+void display_help()
+{
+	/*WINDOW *popup = newwin(0, 0, screen_rows, screen_cols);
+	box(popup, 0, 0);
+
+	mvprintw(popup, 0, 1, "%s", "r : Rename the selected file.");
+	mvprintw(popup, 1, 1, "%s", "i : Gives additionnal information about the selected file.");
+	mvprintw(popup, 2, 1, "%s", "h : Help providing informations about every different imput.");
+	mvprintw(popup, 3, 1, "%s", "s : Search duplicates that matches with filename.");
+	mvprintw(popup, 4, 1, "%s", "a : Select all the files in a repository if one is selected, every visible file otherwise.");
+	mvprintw(popup, 5, 1, "%s", "d : Delete the selected file, asking confirmation when doing so.");
+	mvprintw(popup, 6, 1, "%s", "x : Execute first loop to detect duplicates.");
+	mvprintw(popup, 7, 1, "%s", "m : Move the selected file in a selected repository.");
+	wrefresh(popup);
+
+	wgetch(popup); // attendre une touche
+
+	delwin(popup);
+	touchwin(stdscr);
+
+	refresh();*/
+}
+
 bool ui_handle_mouse(int *cursor, Items items, MEVENT *ev)
 {
 	if (!cursor) return false;
