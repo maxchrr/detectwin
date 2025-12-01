@@ -149,7 +149,7 @@ void show_popup(const char *msg)
 	refresh();
 }
 
-void display_help()
+void display_help(void)
 {
 	/*WINDOW *popup = newwin(0, 0, screen_rows, screen_cols);
 	box(popup, 0, 0);
