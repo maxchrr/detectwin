@@ -1,3 +1,0 @@
-/Users/max/Desktop/etu/detectwin/build/CMakeFiles/detectwin.dir
-/Users/max/Desktop/etu/detectwin/build/CMakeFiles/edit_cache.dir
-/Users/max/Desktop/etu/detectwin/build/CMakeFiles/rebuild_cache.dir
