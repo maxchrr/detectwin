@@ -20,9 +20,9 @@ static void sel_grow(Selection *s)
 
 void sel_init(Selection *s)
 {
-	s->paths = malloc(sizeof(char*) * s->capacity);
 	s->count = 0;
 	s->capacity = 8;
+	s->paths = malloc(sizeof(char*) * s->capacity);
 }
 
 void sel_free(Selection *s)
