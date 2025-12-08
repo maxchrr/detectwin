@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15) # FetchContent is available in 3.11+
 project(detectwin)
 set(CMAKE_C_STANDARD 99) # Requires C99 standard
-set(MY_C_FLAGS ${CMAKE_C_FLAGS} "-O0" "-Wall" "-Wextra" "-pedantic")
+set(MY_C_FLAGS ${CMAKE_C_FLAGS} "-O0" "-Wall" "-Wextra" "-pedantic" "-Wno-"format-truncation" "-Wno-unused-but-set-variable")
 
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
