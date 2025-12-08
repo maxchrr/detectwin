@@ -15,5 +15,5 @@ build:
     - cmake --build .
   artifacts:
     paths:
-      - detectwin
+      - ./build/detectwin
     expire_in: 1 week

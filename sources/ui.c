@@ -222,9 +222,6 @@ void display_duplicates(const Selection *same_name, const Selection* same_data)
 	mvwprintw(popup, row++, 2, "[Same Name]");
 	wattroff(popup, A_BOLD);
 
-	int lines_used = row;
-	int available_inner = ph - 3; /* rows usable for lines inside popup (approx) */
-
 	if (same_name->count == 0) {
 		/* print "None" but clipped to window width-4 */
 		int maxlen = pw - 4;
