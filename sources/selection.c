@@ -136,7 +136,7 @@ void sel_remove_dir(Selection *s, const char *path)
 	free_dir(&items);
 }
 
-void sel_remove_all(Selection *s, const char *path)
+void sel_remove_all(Selection *s)
 {
 	if (!s || s->count == 0) return;
 
@@ -146,19 +146,41 @@ void sel_remove_all(Selection *s, const char *path)
 	s->count = 0;
 }
 
-bool sel_is_duplicated(Selection *s)
+static const char* to_relative(const char *cwd, const char *fullpath)
 {
-	if(!s || s->count < 2) return false;
+	size_t cwd_len = strlen(cwd);
+	if (strncmp(fullpath, cwd, cwd_len) == 0) {
+		// Skip cwd + '/'
+		if (fullpath[cwd_len] == '/')
+			return fullpath + cwd_len + 1;
+		return fullpath + cwd_len;
+	}
+	return fullpath; // fallback
+}
+
+void sel_find_duplicates(Selection *s, const char *cwd, Selection *same_name, Selection *same_data)
+{
+	sel_init(same_name);
+	sel_init(same_data);
+
+	if(!s || s->count < 2) return;
 
 	for (int i=0; i<s->count; ++i)
 	{
 		for (int j=i+1; j<s->count; ++j)
 		{
-			if (cmpname(s->paths[i], s->paths[j]))
-				return true;
-			else if (cmpdata(s->paths[i], s->paths[j]))
-				return true;
+			const char *r1 = to_relative(cwd, s->paths[i]);
+			const char *r2 = to_relative(cwd, s->paths[j]);
+
+			char buf[PATH_MAX_LEN * 2 + 16];
+			snprintf(buf, sizeof(buf), "%s  <-->  %s", r1, r2);
+
+			if (cmpname(s->paths[i], s->paths[j])) {
+				sel_add(same_name, buf);
+			}
+			else if (cmpdata(s->paths[i], s->paths[j])) {
+				sel_add(same_data, buf);
+			}
 		}
 	}
-	return false;
 }

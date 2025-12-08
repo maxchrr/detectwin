@@ -87,11 +87,13 @@ int main(int argc, char* argv[])
 		/* Start detection */
 		case 'x':
 		{
-			bool duplicated = sel_is_duplicated(&sel);
-			if (duplicated)
-				show_popup("Duplicate files !");
-			else
-				show_popup("No duplicated detected.");
+			Selection same_name, same_data;
+			
+			sel_find_duplicates(&sel, cwd, &same_name, &same_data);
+			display_duplicates(&same_name, &same_data);
+
+			sel_free(&same_name);
+			sel_free(&same_data);
 			break;
 		}
 
@@ -102,14 +104,14 @@ int main(int argc, char* argv[])
 
 		case 'a':
 			sel_add_all(&sel, items, cwd);
-			draw(cursor, cwd, items, &sel);  // <--- force immediate redraw
+			draw(cursor, cwd, items, &sel);  // force immediate redraw
     			refresh(); 
 			show_popup("All items selected.");
 		break;
 
 		case 'A':   // Remove all selections
-			sel_remove_all(&sel, cwd);
-			draw(cursor, cwd, items, &sel);  // <--- force immediate redraw
+			sel_remove_all(&sel);
+			draw(cursor, cwd, items, &sel);  // force immediate redraw
     			refresh(); 
 			show_popup("Selection cleared.");
 		break;

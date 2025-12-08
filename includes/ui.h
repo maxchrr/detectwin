@@ -14,6 +14,7 @@ void ui_end(void);
 /* draw shows the current directory listing (uses Selection to mark global selection) */
 void draw(int cursor, char *cwd, Items items, Selection *sel);
 void show_popup(const char *msg);
+void display_duplicates(const Selection *same_name, const Selection* same_data);
 void display_help(void);
 
 /* return 1 if mouse handled (updates cursor), 0 otherwise */

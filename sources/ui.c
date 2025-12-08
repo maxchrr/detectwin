@@ -140,12 +140,142 @@ void show_popup(const char *msg)
 
 	mvwprintw(popup, 2, 3, "%s", msg);
 	wrefresh(popup);
-
 	wgetch(popup); // attendre une touche
 
 	delwin(popup);
 	touchwin(stdscr);
+	refresh();
+}
 
+#define MIN_POPUP_WIDTH 30
+#define POPUP_MARGIN 4
+
+void display_duplicates(const Selection *same_name, const Selection* same_data)
+{
+	/* Safety: pointers must be valid */
+	if (!same_name || !same_data) {
+		show_popup("No duplicates found.");
+		return;
+	}
+
+	/* If nothing to show */
+	if (same_name->count == 0 && same_data->count == 0) {
+		show_popup("No duplicates found.");
+		return;
+	}
+
+	int rows, cols;
+	getmaxyx(stdscr, rows, cols);
+
+	/* Compute desired height: title + spacing + each section + margins */
+	int desired_lines = 1         /* main title */
+	                  + 1         /* blank */
+	                  + 1         /* [Same Name] title */
+	                  + (same_name->count ? same_name->count : 1) /* at least one line "None" */
+	                  + 1         /* blank */
+	                  + 1         /* [Same Data] title */
+	                  + (same_data->count ? same_data->count : 1) /* at least one line "None" */
+	                  + 2;        /* padding/border */
+
+	/* Clamp height to terminal rows - keep at least 3 rows for border/title */
+	int ph = desired_lines;
+	if (ph > rows - 2)
+		ph = rows - 2;
+	if (ph < 6)
+		ph = 6;
+
+	/* Compute width: longest line in both lists (+margins), clamp to terminal width */
+	int pw = MIN_POPUP_WIDTH;
+	for (int i = 0; i < same_name->count; ++i) {
+		int len = (int)strlen(same_name->paths[i]);
+		if (len + POPUP_MARGIN > pw) pw = len + POPUP_MARGIN;
+	}
+	for (int i = 0; i < same_data->count; ++i) {
+		int len = (int)strlen(same_data->paths[i]);
+		if (len + POPUP_MARGIN > pw) pw = len + POPUP_MARGIN;
+	}
+	/* ensure width doesn't exceed terminal minus 2 for borders */
+	if (pw > cols - 4) pw = cols - 4;
+	if (pw < MIN_POPUP_WIDTH) pw = MIN_POPUP_WIDTH;
+
+	int y = (rows - ph) / 2;
+	int x = (cols - pw) / 2;
+
+	/* Create window and check */
+	WINDOW *popup = newwin(ph, pw, y, x);
+	if (!popup) {
+		/* Fallback: simple message */
+		show_popup("Unable to open popup (terminal too small).");
+		return;
+	}
+	box(popup, 0, 0);
+
+	int row = 1;
+	/* Title */
+	wattron(popup, A_BOLD | A_UNDERLINE);
+	mvwprintw(popup, row++, 2, "Duplicate Files");
+	wattroff(popup, A_BOLD | A_UNDERLINE);
+	row++; /* blank */
+
+	/* Section: Same Name */
+	wattron(popup, A_BOLD);
+	mvwprintw(popup, row++, 2, "[Same Name]");
+	wattroff(popup, A_BOLD);
+
+	int lines_used = row;
+	int available_inner = ph - 3; /* rows usable for lines inside popup (approx) */
+
+	if (same_name->count == 0) {
+		/* print "None" but clipped to window width-4 */
+		int maxlen = pw - 4;
+		mvwprintw(popup, row++, 4, "%.*s", maxlen, "None");
+	} else {
+		/* Print as many lines as fit; if not all fit, add indication */
+		for (int i = 0; i < same_name->count; ++i) {
+			if (row >= ph - 2) break; /* keep last line for margin */
+			int maxlen = pw - 6; /* left margin inside popup */
+			mvwprintw(popup, row++, 4, "%.*s", maxlen, same_name->paths[i]);
+		}
+		if (same_name->count > 0 && row >= ph - 2 && (same_name->count + same_data->count) > (ph - 6)) {
+			/* not enough space in whole popup, indicate truncation */
+			mvwprintw(popup, row++, 4, "... (output truncated)");
+		}
+	}
+
+	row++; /* blank between sections if space allows */
+
+	/* Section: Same Data */
+	if (row < ph - 1) {
+		wattron(popup, A_BOLD);
+		mvwprintw(popup, row++, 2, "[Same Data]");
+		wattroff(popup, A_BOLD);
+	}
+
+	if (same_data->count == 0) {
+		if (row < ph - 1)
+			mvwprintw(popup, row++, 4, "%.*s", pw - 4, "None");
+	} else {
+		for (int i = 0; i < same_data->count; ++i) {
+			if (row >= ph - 1) break;
+			mvwprintw(popup, row++, 4, "%.*s", pw - 6, same_data->paths[i]);
+		}
+		if (same_data->count > 0 && row >= ph - 1 && (same_data->count > (ph - 6))) {
+			/* indicate truncation if needed */
+			if (row < ph - 1)
+				mvwprintw(popup, row++, 4, "... (truncated)");
+		}
+	}
+
+	/* Footer hint if truncated: we could also show counts */
+	if (row >= ph - 1) {
+		/* nothing extra */
+	}
+
+	wrefresh(popup);
+	wgetch(popup);
+
+	delwin(popup);
+	touchwin(stdscr);
 	refresh();
 }
 
